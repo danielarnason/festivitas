@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool type="plugin">
+
+	<src><![CDATA[
+
+		setTimeout(() => {
+			let sideArray = ['bottom', 'left', 'right']
+			let julemandSide = sideArray[Math.floor(Math.random() * sideArray.length)]
+
+			let peekabooDiv = document.createElement('div')
+			peekabooDiv.id = 'peekabooDiv'
+			peekabooDiv.style.width = '100px'
+			peekabooDiv.style.zIndex = '999'
+			peekabooDiv.style.position = 'fixed'
+
+			if (julemandSide === 'bottom') {
+				peekabooDiv.style.bottom = '12px'
+				peekabooDiv.style.left = '50%'
+			} else if (julemandSide === 'right') {
+				peekabooDiv.style.right = '-35px'
+				peekabooDiv.style.top = '50%'
+				peekabooDiv.style.transform = 'rotate(-90deg)'
+			} else if (julemandSide === 'left') {
+				peekabooDiv.style.left = '-35px'
+				peekabooDiv.style.transform = 'rotate(90deg)'
+				peekabooDiv.style.top = '50%'
+			}
+			peekabooDiv.style.cursor = 'pointer'
+			let peekabooGif = document.createElement('img')
+			peekabooGif.src = `${spm.getSession().getParam('cbinfo.site.url')}/skins/${spm.getSession().getParam('festivitas.skin_name')}/images/modules/festivitas/peekaboo-christmas.gif`
+			peekabooGif.style.maxWidth = '100%'
+			peekabooGif.style.maxHeight = 'auto'
+			peekabooDiv.appendChild(peekabooGif)
+
+			document.body.insertBefore(peekabooDiv, document.body.firstChild)
+
+			peekabooDiv.addEventListener('click', () => {
+				juleSne()
+			})
+		}, spm.getSession().getParam('festivitas.ventetid'))
+
+
+		
+		function juleSne() {
+			if (spsjq('#julesne-container').length) {
+				spsjq('#julesne-container').remove()
+				spsjq('#santaDiv').remove()
+				spsjq('#peekabooDiv').remove()
+				return;
+			}
+
+			let canvas = document.createElement('canvas');
+			canvas.id = 'julesne-container'
+			canvas.width = window.innerWidth
+			canvas.height = window.innerHeight
+			canvas.style.position = 'fixed'
+			canvas.style.zIndex = 10
+			canvas.style.pointerEvents = 'none'
+			document.body.insertBefore(canvas, document.body.firstChild);
+
+			let ctx = canvas.getContext('2d')
+
+			// Variables
+			const attributes = {
+			particleCount: 800,   // Change amount of snowflakes
+			particleSize: 3,      // Max size of a snowflake
+			fallingSpeed: 1,      // Intensity of the snowfall horizontal
+			colors: ['#eee', '#fff'] // Array of usable colors
+			}
+
+			window.addEventListener('resize', () => {
+				canvas.height = window.innerHeight
+				canvas.width = window.innerWidth
+			})
+
+			// Utility Functions
+			function randomIntFromRange(min, max) {
+				return Math.floor(Math.random() * (max - min + 1) + min)
+			}
+
+			function randomColor(colors) {
+				return colors[Math.floor(Math.random() * colors.length)]
+			}
+
+			function distance(x1, y1, x2, y2) {
+				const xDist = x2 - x1
+				const yDist = y2 - y1
+
+				return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
+			}
+
+			// Objects
+			function Particle(x, y, radius, color, radians) {
+				this.x = x;
+				this.y = y;
+				this.radius = radius;
+				this.color = color;
+				this.radians = radians;
+				this.velocity = 0.005;
+
+				this.update = () => {
+					// Move these points over time
+					this.radians += this.velocity;
+					this.x = x + Math.cos(this.radians) * 400 ;
+					this.y = y + Math.tan(this.radians) * 600 ;
+
+					this.draw();
+				}
+
+				this.draw = () => {
+					ctx.beginPath()
+					ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+					ctx.fillStyle = this.color
+					ctx.fill()
+
+					ctx.closePath()
+				}
+			}
+
+			// Implementation
+			let particles;
+			function init() {
+				particles = [];
+
+				for (let i = 0; i < attributes.particleCount; i++) {
+					particles.push(
+					new Particle(
+						Math.random() * canvas.width,
+						Math.random() * canvas.height,
+						randomIntFromRange(0.5, attributes.particleSize),
+						randomColor(attributes.colors),
+						Math.random() * 80
+					)
+					);
+				}
+			}
+
+			// Animation Loop
+			function animate() {
+				requestAnimationFrame(animate)
+				ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+				particles.forEach(particle => {
+				particle.update();
+				});
+			}
+
+			init()
+			animate()
+
+			let santaDiv = document.createElement('div')
+			let santaGif = document.createElement('img')
+			santaGif.src = `${spm.getSession().getParam('cbinfo.site.url')}/skins/${spm.getSession().getParam('festivitas.skin_name')}/images/modules/festivitas/santa.gif`
+			santaDiv.appendChild(santaGif)
+
+			santaDiv.id = 'santaDiv'
+			santaDiv.style.position = 'fixed'
+			santaDiv.style.bottom = '30px'
+			santaDiv.style.right = '-350px'
+			santaDiv.style.zIndex = '11'
+
+			document.body.insertBefore(santaDiv, canvas)
+
+
+			let moveSanta = () => {
+				spsjq('#santaDiv').animate({right: window.innerWidth + spsjq('#santaDiv').width()}, 15000, () => {
+					spsjq('#santaDiv').css("right", "-350px")
+				})
+			}
+
+			setInterval(() => {
+				moveSanta()
+			}, 2000)
+
+		}
+	]]>
+	</src>
+
+	
+</tool>

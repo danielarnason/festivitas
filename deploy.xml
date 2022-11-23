@@ -1,0 +1,11 @@
+<deploy>
+
+	<version>0.1</version>
+	<description>Giv din Spatial Suite lidt mere julestemning!</description>
+
+	
+	<param name="festivitas.skin_name">base_custom</param>
+	<param name="festivitas.ventetid">300000</param>
+
+	<copydir fromdir="[module:festivitas.dir]/images" todir="[cbinfo.wwwroot.dir]/skins/[festivitas.skin_name]/images/modules/festivitas" />
+</deploy>
