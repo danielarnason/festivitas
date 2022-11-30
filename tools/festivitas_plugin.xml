@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tool type="plugin">
 
+
+	<requires>
+		<file type="css" name="/modules/festivitas/css/festivitas_styles.css"/>
+	</requires>
+
 	<src><![CDATA[
 
 		setTimeout(() => {
@@ -31,6 +36,11 @@
 			peekabooGif.style.maxWidth = '100%'
 			peekabooGif.style.maxHeight = 'auto'
 			peekabooDiv.appendChild(peekabooGif)
+			
+			let tooltipSpan = document.createElement('span')
+			tooltipSpan.innerHTML = 'Klik for julestemning! Klik igen til at slukke 🎅'
+			tooltipSpan.classList.add('tooltip')
+			peekabooDiv.appendChild(tooltipSpan)
 
 			document.body.insertBefore(peekabooDiv, document.body.firstChild)
 

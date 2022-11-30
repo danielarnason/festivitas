@@ -8,4 +8,5 @@
 	<param name="festivitas.ventetid">300000</param>
 
 	<copydir fromdir="[module:festivitas.dir]/images" todir="[cbinfo.wwwroot.dir]/skins/[festivitas.skin_name]/images/modules/festivitas" />
+	<copydir fromdir="[module:festivitas.dir]/css" todir="[cbinfo.wwwroot.dir]/modules/festivitas/css" />
 </deploy>
